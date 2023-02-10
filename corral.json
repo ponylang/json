@@ -2,14 +2,13 @@
   "packages": [
     "json"
   ],
-  "deps": [
-  ],
+  "deps": [],
   "info": {
     "description": "",
     "homepage": "https://github.com/ponylang/json",
     "license": "BSD-2-Clause",
     "documentation_url": "https://ponylang.github.io/json/",
-    "version": "0.0.0",
+    "version": "0.1.0",
     "name": "json"
   }
 }
