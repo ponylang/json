@@ -4,7 +4,7 @@
   ],
   "deps": [],
   "info": {
-    "description": "",
+    "description": "A JSON library for Pony",
     "homepage": "https://github.com/ponylang/json",
     "license": "BSD-2-Clause",
     "documentation_url": "https://ponylang.github.io/json/",
