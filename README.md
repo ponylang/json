@@ -11,7 +11,7 @@ JSON was extracted from the standard library as part of [RFC #78](https://github
 ## Installation
 
 * Install [corral](https://github.com/ponylang/corral)
-* `corral add github.com/ponylang/json.git --version 0.1.0`
+* `corral add github.com/ponylang/json.git --version 0.2.0`
 * `corral fetch` to fetch your dependencies
 * `use "json"` to include this package
 * `corral run -- ponyc` to compile your application
