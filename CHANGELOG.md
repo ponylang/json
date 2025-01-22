@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file. This projec
 
 ### Added
 
+- Add JsonExtractor utility class ([PR #19](https://github.com/ponylang/json/pull/19))
 
 ### Changed
 
