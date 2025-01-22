@@ -7,6 +7,7 @@ actor \nodoc\ Main is TestList
 
   fun tag tests(test: PonyTest) =>
     // Tests below function across all systems and are listed alphabetically
+    test(_TestExtractor)
     test(_TestNoPrettyPrintArray)
     test(_TestNoPrettyPrintObject)
     test(_TestParseArray)
@@ -642,3 +643,63 @@ class \nodoc\ iso _TestParsePrint is UnitTest
     expect.remove("\r")
 
     h.assert_eq[String ref](expect, actual)
+
+class \nodoc\ iso _TestExtractor is UnitTest
+  """
+  Test JsonExtractor
+  """
+  fun name(): String => "JSON/extractor"
+
+  fun apply(h: TestHelper) ? =>
+    let src =
+      """
+      [
+        {
+          "precision": "zip",
+          "population": 10,
+          "objection": {
+            "fu": "bar"
+          }
+        },
+        {
+          "data": [
+            "Really?",
+            "yes",
+            true,
+            4,
+            12.3
+          ]
+        },
+        47,
+        {
+          "foo": {
+            "bar": [
+              {
+                "aardvark": null
+              },
+              false
+            ]
+          }
+        }
+      ]"""
+
+    let doc = recover val JsonDoc.>parse(src)? end
+    let array = JsonExtractor(doc.data).as_array()?
+    h.assert_eq[USize](4, array.size())
+    // Array index 0
+    h.assert_eq[String]("zip", JsonExtractor(array(0)?)("precision")?.as_string()?)
+    h.assert_eq[I64](10, JsonExtractor(array(0)?)("population")?.as_i64()?)
+    h.assert_eq[String]("bar", JsonExtractor(array(0)?)("objection")?("fu")?.as_string()?)
+    // Array index 1
+    h.assert_eq[USize](5, JsonExtractor(array(1)?)("data")?.size()?)
+    h.assert_eq[String]("Really?", JsonExtractor(array(1)?)("data")?(0)?.as_string()?)
+    h.assert_eq[String]("yes", JsonExtractor(array(1)?)("data")?(1)?.as_string()?)
+    h.assert_eq[Bool](true, JsonExtractor(array(1)?)("data")?(2)?.as_bool()?)
+    h.assert_eq[I64](4, JsonExtractor(array(1)?)("data")?(3)?.as_i64()?)
+    h.assert_eq[F64](12.3, JsonExtractor(array(1)?)("data")?(4)?.as_f64()?)
+    // Array index 2
+    h.assert_eq[I64](47, JsonExtractor(array(2)?).as_i64()?)
+    // Array index 3
+    h.assert_eq[USize](2, JsonExtractor(array(3)?)("foo")?("bar")?.size()?)
+    h.assert_eq[None](None, JsonExtractor(array(3)?)("foo")?("bar")?(0)?("aardvark")?.as_none()?)
+    h.assert_eq[Bool](false, JsonExtractor(array(3)?)("foo")?("bar")?(1)?.as_bool()?)
